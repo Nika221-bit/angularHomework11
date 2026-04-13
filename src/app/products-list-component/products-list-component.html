@@ -1,0 +1,56 @@
+<section class="list-header">
+  <div class="search-row">
+    <div>
+      <p class="page-title">Products dashboard</p>
+      <p class="page-subtitle">Filter by name or category, then click any product for details.</p>
+    </div>
+    <form class="add-product-form" (submit)="$event.preventDefault(); onAddProduct()">
+      <label>
+        <span>Name</span>
+        <input type="text" placeholder="New product name" [(ngModel)]="newProductName" name="newProductName" />
+      </label>
+      <label>
+        <span>Category</span>
+        <select [(ngModel)]="newProductCategory" name="newProductCategory">
+          <option value="" disabled selected>Select category</option>
+          <option value="electronics">Electronics</option>
+          <option value="fashion">Fashion</option>
+        </select>
+      </label>
+      <button type="submit" class="primary-button" [disabled]="!newProductName.trim() || !newProductCategory.trim()">Add product</button>
+    </form>
+  </div>
+
+  <div class="controls">
+    <label class="search-control">
+      <span>Search</span>
+      <input type="search" placeholder="Search products" (input)="onSearch($event.target.value)" [value]="searchQuery$ | async" />
+    </label>
+    <label class="search-control">
+      <span>Category filter</span>
+      <select [ngModel]="selectedCategory$ | async" (ngModelChange)="setCategory($event)">
+        <option value="">All</option>
+        <option value="electronics">Electronics</option>
+        <option value="fashion">Fashion</option>
+      </select>
+    </label>
+  </div>
+</section>
+
+<div *ngIf="loading$ | async" class="loading">Loading…</div>
+
+<ng-container *ngIf="products$ | async as products">
+  <div *ngIf="products.length; else noResults" class="product-list">
+    <article *ngFor="let product of products" class="product-item">
+      <a [routerLink]="['/products', product.id]" class="product-link">{{ product.name }}</a>
+      <span class="category">{{ product.category }}</span>
+      <p class="product-meta">Product ID: {{ product.id }}</p>
+    </article>
+  </div>
+</ng-container>
+
+<ng-template #noResults>
+  <div class="empty-state">
+    <p>No products match the current filters.</p>
+  </div>
+</ng-template>

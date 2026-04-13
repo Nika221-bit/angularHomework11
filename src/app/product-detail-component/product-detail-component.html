@@ -1,0 +1,26 @@
+<section class="detail-card" *ngIf="product$ | async as product; else missingProduct">
+  <div class="detail-header">
+    <a routerLink="/products" class="back-link">← Back to products</a>
+    <h2>{{ product.name }}</h2>
+  </div>
+
+  <div class="detail-body">
+    <div class="detail-row">
+      <span class="label">Product ID</span>
+      <span class="value">{{ product.id }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Category</span>
+      <span class="value">{{ product.category }}</span>
+    </div>
+    <p class="detail-note">This product page uses Angular Router params and async data flow from the shared service.</p>
+  </div>
+</section>
+
+<ng-template #missingProduct>
+  <section class="detail-card empty-state">
+    <p>Product not found. Try selecting another item from the list.</p>
+    <a routerLink="/products" class="back-link">Back to products</a>
+  </section>
+</ng-template>
+
